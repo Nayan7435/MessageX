@@ -46,6 +46,11 @@ exports.sendMessage = async (req, res) => {
             message,
         });
 
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit('newMessage', newMessage);
+        }
+
         res.status(201).json({ message: newMessage });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
